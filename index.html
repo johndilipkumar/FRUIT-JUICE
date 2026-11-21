@@ -1,0 +1,1161 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Blendy — Real fruit smoothies</title>
+    <meta name="description" content="Blendy real fruit smoothies — Berry, Kiwi, Banana and Strawberry." />
+    <meta property="og:title" content="Blendy — Real fruit smoothies" />
+    <meta property="og:description" content="Blendy real fruit smoothies — Berry, Kiwi, Banana and Strawberry." />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="preload" as="font" type="font/woff2" href="/fonts/poppins-700.woff2" crossorigin />
+    <link rel="preload" as="font" type="font/woff2" href="/fonts/poppins-500.woff2" crossorigin />
+    <link rel="preload" as="font" type="font/woff2" href="/fonts/poppins-600.woff2" crossorigin />
+    <link rel="preload" as="font" type="font/woff2" href="/fonts/baloo2-800.woff2" crossorigin />
+    <link rel="preload" as="image" href="https://images.higgs.ai/?default=1&output=webp&w=2048&q=85&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20261117_053958_8803e421-29b1-4c24-8efd-54cae3f479b4.png" />
+    <style>
+      @font-face {
+        font-family: 'Poppins';
+        font-style: normal;
+        font-weight: 500;
+        font-display: swap;
+        src: url('/fonts/poppins-500.woff2') format('woff2');
+      }
+      @font-face {
+        font-family: 'Poppins';
+        font-style: normal;
+        font-weight: 600;
+        font-display: swap;
+        src: url('/fonts/poppins-600.woff2') format('woff2');
+      }
+      @font-face {
+        font-family: 'Poppins';
+        font-style: normal;
+        font-weight: 700;
+        font-display: swap;
+        src: url('/fonts/poppins-700.woff2') format('woff2');
+      }
+      @font-face {
+        font-family: 'Baloo 2';
+        font-style: normal;
+        font-weight: 800;
+        font-display: swap;
+        src: url('/fonts/baloo2-800.woff2') format('woff2');
+      }
+
+      :root {
+        --u: 1px;
+        --fy: 0px;
+        --n: clamp(0.5px, min(100vw / 1440, 100vh / 900), 1.3px);
+      }
+
+      :root.is-mobile {
+        --n: 1px;
+      }
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+      }
+
+      body {
+        background-color: #C2B0DC;
+        color: #FFFFFF;
+        font-family: 'Poppins', system-ui, sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        touch-action: pan-y;
+      }
+
+      /* Full-viewport stage & slides */
+      .stage {
+        position: fixed;
+        inset: 0;
+        overflow: hidden;
+        user-select: none;
+        -webkit-user-select: none;
+      }
+
+      .slide {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        visibility: hidden;
+        z-index: 0;
+        will-change: clip-path;
+      }
+
+      .slide.is-active {
+        visibility: visible;
+        z-index: 2;
+      }
+
+      .slide.is-under {
+        visibility: visible;
+        z-index: 1;
+      }
+
+      .frame {
+        position: absolute;
+        width: calc(1440 * var(--u));
+        height: calc(900 * var(--u));
+        left: calc(50% - 720 * var(--u));
+        top: calc(50% - 450 * var(--u) + var(--fy));
+      }
+
+      .layer {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        will-change: transform;
+      }
+
+      /* Flavour word */
+      .word {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        margin: 0;
+        padding: 0;
+        font-family: 'Poppins', system-ui, sans-serif;
+        font-weight: 700;
+        line-height: 1;
+        white-space: nowrap;
+        color: #FFFFFF;
+        text-align: center;
+      }
+
+      /* Floor shadows */
+      .shadow {
+        position: absolute;
+        border-radius: 50%;
+        background: radial-gradient(closest-side, rgba(60, 40, 80, 0.22), transparent);
+        filter: blur(calc(4 * var(--u)));
+      }
+
+      /* Bottle */
+      .bottle {
+        position: absolute;
+        background-repeat: no-repeat;
+      }
+
+      /* Fruit pieces */
+      .piece {
+        position: absolute;
+      }
+
+      .piece.is-mirrored {
+        transform: scaleX(-1);
+      }
+
+      .layer-corner .piece {
+        filter: blur(calc(9 * var(--u)));
+      }
+
+      .piece-inner {
+        width: 100%;
+        height: 100%;
+        background-repeat: no-repeat;
+        animation: bob var(--dur, 4s) ease-in-out var(--delay, 0s) infinite alternate;
+        will-change: transform;
+      }
+
+      @keyframes bob {
+        0% {
+          transform: translateY(calc(-7 * var(--u))) rotate(var(--r0, -3deg));
+        }
+        100% {
+          transform: translateY(calc(7 * var(--u))) rotate(var(--r1, 3deg));
+        }
+      }
+
+      /* Fixed UI overlay */
+      .ui {
+        position: fixed;
+        inset: 0;
+        z-index: 10;
+        pointer-events: none;
+      }
+
+      .ui a,
+      .ui button {
+        pointer-events: auto;
+        background: none;
+        border: none;
+        color: #FFFFFF;
+        font: inherit;
+        text-decoration: none;
+        cursor: pointer;
+        padding: 0;
+        margin: 0;
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      .ui a:focus-visible,
+      .ui button:focus-visible {
+        outline: 2px solid rgba(255, 255, 255, 0.85);
+        outline-offset: 4px;
+        border-radius: 4px;
+      }
+
+      .ui-text {
+        text-shadow: 0 1px 6px rgba(90, 70, 40, 0.18);
+      }
+
+      /* Header row */
+      .nav {
+        position: absolute;
+        left: calc(50 * var(--n));
+        right: calc(50 * var(--n));
+        top: calc(26 * var(--n));
+        height: calc(50 * var(--n));
+        display: flex;
+        align-items: center;
+      }
+
+      .logo {
+        font-family: 'Baloo 2', system-ui, sans-serif;
+        font-weight: 800;
+        font-size: calc(51 * var(--n));
+        letter-spacing: -0.02em;
+        line-height: 1;
+        display: inline-block;
+        white-space: nowrap;
+      }
+
+      .tabs {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        align-items: center;
+        gap: calc(88 * var(--n));
+        font-family: 'Poppins', system-ui, sans-serif;
+        font-weight: 500;
+        font-size: calc(21 * var(--n));
+        line-height: 1.2;
+      }
+
+      .tab {
+        padding: calc(6 * var(--n)) 0;
+        white-space: nowrap;
+        transition: opacity 0.2s ease;
+      }
+
+      .tab:hover {
+        opacity: 0.88;
+      }
+
+      .underline {
+        position: absolute;
+        left: 0;
+        top: calc(100% + 2 * var(--n));
+        height: 2px;
+        border-radius: 2px;
+        background: #FFFFFF;
+        pointer-events: none;
+        will-change: transform, width;
+        transition:
+          transform 0.6s cubic-bezier(0.65, 0, 0.35, 1),
+          width 0.6s cubic-bezier(0.65, 0, 0.35, 1);
+      }
+
+      .account {
+        margin-left: auto;
+        display: flex;
+        align-items: center;
+        gap: calc(22 * var(--n));
+        font-family: 'Poppins', system-ui, sans-serif;
+        font-weight: 500;
+        font-size: calc(21 * var(--n));
+        line-height: 1.2;
+        white-space: nowrap;
+      }
+
+      .account a:hover {
+        opacity: 0.88;
+      }
+
+      .sep {
+        opacity: 0.9;
+        pointer-events: none;
+        user-select: none;
+      }
+
+      /* Bottom controls */
+      .shop {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        bottom: calc(36 * var(--n));
+        font-family: 'Poppins', system-ui, sans-serif;
+        font-weight: 600;
+        font-size: calc(21 * var(--n));
+        letter-spacing: 0.2em;
+        line-height: 1.48;
+        padding: calc(10 * var(--n)) calc(16 * var(--n));
+        white-space: nowrap;
+        transition: opacity 0.2s ease;
+      }
+
+      .shop:hover {
+        opacity: 0.88;
+      }
+
+      .arrow {
+        position: absolute;
+        bottom: calc(30 * var(--n));
+        width: calc(52 * var(--n));
+        height: calc(52 * var(--n));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: opacity 0.2s ease;
+      }
+
+      .arrow:hover {
+        opacity: 0.82;
+      }
+
+      .arrow-prev {
+        left: calc(36 * var(--n));
+      }
+
+      .arrow-next {
+        right: calc(36 * var(--n));
+      }
+
+      .arrow svg {
+        width: calc(28 * var(--n));
+        height: calc(28 * var(--n));
+        display: block;
+        filter: drop-shadow(0 1px 4px rgba(90, 70, 40, 0.18));
+      }
+
+      /* Opening reveal states (uses standalone translate property, preserving transform) */
+      .reveal-hidden {
+        opacity: 0;
+        translate: 0 14px;
+      }
+
+      .reveal-active {
+        opacity: 1;
+        translate: 0 0;
+        transition:
+          opacity 1000ms cubic-bezier(0.22, 0.8, 0.3, 1) var(--reveal-delay, 0ms),
+          translate 1000ms cubic-bezier(0.22, 0.8, 0.3, 1) var(--reveal-delay, 0ms);
+      }
+
+      /* Mobile & portrait layout (<= 820px wide or taller than wide) */
+      :root.is-mobile .nav {
+        left: 20px;
+        right: 20px;
+        top: 16px;
+        height: 40px;
+      }
+
+      :root.is-mobile .logo {
+        font-size: 34px;
+      }
+
+      :root.is-mobile .account {
+        font-size: 15px;
+        gap: 10px;
+      }
+
+      :root.is-mobile .tabs {
+        top: 52px;
+        gap: 22px;
+        font-size: 15px;
+      }
+
+      :root.is-mobile .tab {
+        padding: 6px 0;
+      }
+
+      :root.is-mobile .shop {
+        font-size: 15px;
+        bottom: 22px;
+        padding: 10px 16px;
+      }
+
+      :root.is-mobile .arrow {
+        width: 48px;
+        height: 48px;
+        bottom: 12px;
+      }
+
+      :root.is-mobile .arrow-prev {
+        left: 8px;
+      }
+
+      :root.is-mobile .arrow-next {
+        right: 8px;
+      }
+
+      :root.is-mobile .arrow svg {
+        width: 24px;
+        height: 24px;
+      }
+
+      /* Reduced motion */
+      @media (prefers-reduced-motion: reduce) {
+        .piece-inner {
+          animation: none;
+          transform: rotate(var(--r, 0deg));
+        }
+
+        .underline {
+          transition: none;
+        }
+
+        .reveal-hidden,
+        .reveal-active {
+          opacity: 1;
+          translate: none;
+          transition: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="stage" id="stage" aria-label="Blendy smoothie flavours"></main>
+
+    <div class="ui" id="ui">
+      <header class="nav">
+        <a class="logo ui-text" id="ui-logo" href="#" draggable="false" style="--reveal-delay: 250ms">Blendy</a>
+
+        <nav class="tabs ui-text" id="ui-tabs" aria-label="Smoothie flavours" style="--reveal-delay: 330ms">
+          <button type="button" class="tab" data-index="0" aria-current="true">Berry</button>
+          <button type="button" class="tab" data-index="1">Kiwi</button>
+          <button type="button" class="tab" data-index="2">Banana</button>
+          <button type="button" class="tab" data-index="3">Strawberry</button>
+          <span class="underline" id="underline" aria-hidden="true"></span>
+        </nav>
+
+        <div class="account ui-text" id="ui-account" style="--reveal-delay: 410ms">
+          <a href="#cart" draggable="false">Cart</a>
+          <span class="sep" aria-hidden="true">|</span>
+          <a href="#register" draggable="false">Register</a>
+        </div>
+      </header>
+
+      <button
+        type="button"
+        class="arrow arrow-prev"
+        id="ui-prev"
+        aria-label="Previous flavour"
+        style="--reveal-delay: 490ms"
+      >
+        <svg viewBox="0 0 28 28" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M24 14H4 M12 6l-8 8 8 8" />
+        </svg>
+      </button>
+
+      <a class="shop ui-text" id="ui-shop" href="#shop" draggable="false" style="--reveal-delay: 570ms">SHOP NOW</a>
+
+      <button
+        type="button"
+        class="arrow arrow-next"
+        id="ui-next"
+        aria-label="Next flavour"
+        style="--reveal-delay: 650ms"
+      >
+        <svg viewBox="0 0 28 28" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M4 14h20 M16 6l8 8-8 8" />
+        </svg>
+      </button>
+    </div>
+
+    <script>
+      (() => {
+        'use strict';
+
+        const PROXY_PREFIX = 'https://images.higgs.ai/?default=1&output=webp&w=2048&q=85&url=';
+        const SHEET_SIZE = 2048;
+        const DESIGN_W = 1440;
+        const DESIGN_H = 900;
+        const WIPE_DURATION = 970;
+        const AUTOPLAY_INTERVAL = 2600;
+        const AUTOPLAY_PAUSE = 6000;
+
+        const LAYER_FACTORS = {
+          word: 0.40,
+          shadow: 0.30,
+          bottle: 0.15,
+          fruit: 0.55,
+          corner: 0.75,
+        };
+
+        const SHADOWS = [
+          { cx: 345, cy: 650, w: 170, h: 24 },
+          { cx: 720, cy: 708, w: 320, h: 30 },
+          { cx: 1318, cy: 638, w: 160, h: 22 },
+          { cx: 1045, cy: 760, w: 150, h: 22 },
+        ];
+
+        const COVER_TABLE = [
+          [0, 0],
+          [0.031, 0.006],
+          [0.134, 0.012],
+          [0.206, 0.023],
+          [0.278, 0.047],
+          [0.34, 0.07],
+          [0.412, 0.105],
+          [0.485, 0.158],
+          [0.546, 0.246],
+          [0.583, 0.55],
+          [0.62, 0.825],
+          [0.69, 0.9],
+          [0.79, 0.94],
+          [0.85, 0.956],
+          [0.93, 0.975],
+          [1, 1],
+        ];
+
+        const FLAVOURS = [
+          {
+            name: 'Berry',
+            bg: '#C2B0DC',
+            sheet: 'https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20261117_053958_8803e421-29b1-4c24-8efd-54cae3f479b4.png',
+            items: [
+              [233, 60, 598, 917],
+              [1209, 272, 569, 573],
+              [265, 1230, 579, 572],
+              [1192, 1192, 626, 641],
+            ],
+            bottle: { x: 518, y: 138, w: 372 },
+            pieces: [
+              { item: 2, x: 383, y: 178, w: 104, rot: 0, mirror: false, layer: 'fruit' },
+              { item: 3, x: 960, y: 232, w: 118, rot: 0, mirror: false, layer: 'fruit' },
+              { item: 1, x: 295, y: 478, w: 129, rot: -8, mirror: false, layer: 'fruit' },
+              { item: 1, x: 1247, y: 455, w: 123, rot: 15, mirror: false, layer: 'fruit' },
+              { item: 2, x: 968, y: 590, w: 110, rot: 30, mirror: false, layer: 'fruit' },
+              { item: 1, x: -15, y: 590, w: 255, rot: 0, mirror: false, layer: 'corner' },
+              { item: 3, x: 1282, y: 40, w: 200, rot: 0, mirror: false, layer: 'corner' },
+            ],
+          },
+          {
+            name: 'Kiwi',
+            bg: '#B4D58A',
+            sheet: 'https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20261117_053958_b5695e60-72da-4b5b-bfb7-a091d528af75.png',
+            items: [
+              [217, 90, 610, 874],
+              [1204, 257, 619, 601],
+              [250, 1197, 619, 522],
+              [1200, 1186, 633, 650],
+            ],
+            bottle: { x: 504, y: 135, w: 403 },
+            pieces: [
+              { item: 2, x: 376, y: 170, w: 144, rot: -150, mirror: true, layer: 'fruit' },
+              { item: 3, x: 960, y: 228, w: 152, rot: 0, mirror: false, layer: 'fruit' },
+              { item: 1, x: 303, y: 460, w: 168, rot: 0, mirror: false, layer: 'fruit' },
+              { item: 2, x: 1187, y: 462, w: 148, rot: -25, mirror: false, layer: 'fruit' },
+              { item: 2, x: 946, y: 606, w: 150, rot: 10, mirror: true, layer: 'fruit' },
+              { item: 1, x: -10, y: 575, w: 260, rot: 0, mirror: false, layer: 'corner' },
+              { item: 3, x: 1285, y: 30, w: 200, rot: 0, mirror: false, layer: 'corner' },
+            ],
+          },
+          {
+            name: 'Banana',
+            bg: '#F3DA8A',
+            sheet: 'https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20261117_053958_6cf14029-4bce-4c9a-b9fc-1c5b185082e3.png',
+            items: [
+              [194, 76, 579, 873],
+              [1205, 228, 596, 597],
+              [230, 1181, 624, 648],
+              [1193, 1182, 646, 659],
+            ],
+            bottle: { x: 512, y: 135, w: 383 },
+            pieces: [
+              { item: 1, x: 387, y: 147, w: 123, rot: 0, mirror: false, layer: 'fruit' },
+              { item: 2, x: 970, y: 223, w: 136, rot: -10, mirror: true, layer: 'fruit' },
+              { item: 3, x: 298, y: 483, w: 132, rot: 15, mirror: false, layer: 'fruit' },
+              { item: 2, x: 1245, y: 462, w: 150, rot: 20, mirror: false, layer: 'fruit' },
+              { item: 3, x: 950, y: 582, w: 130, rot: -12, mirror: false, layer: 'fruit' },
+              { item: 3, x: 0, y: 585, w: 235, rot: 0, mirror: false, layer: 'corner' },
+              { item: 1, x: 1280, y: 30, w: 190, rot: 0, mirror: false, layer: 'corner' },
+            ],
+          },
+          {
+            name: 'Strawberry',
+            bg: '#F2AFC0',
+            sheet: 'https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20261117_055135_cbfb5a8d-c52b-4358-a6ee-d941c6c42285.png',
+            items: [
+              [226, 88, 594, 887],
+              [1190, 216, 561, 653],
+              [257, 1168, 604, 662],
+              [1240, 1169, 632, 686],
+            ],
+            bottle: { x: 512, y: 135, w: 386 },
+            pieces: [
+              { item: 1, x: 372, y: 142, w: 128, rot: 0, mirror: false, layer: 'fruit' },
+              { item: 2, x: 955, y: 225, w: 117, rot: 20, mirror: false, layer: 'fruit' },
+              { item: 3, x: 290, y: 455, w: 140, rot: -10, mirror: false, layer: 'fruit' },
+              { item: 3, x: 1250, y: 432, w: 135, rot: 15, mirror: false, layer: 'fruit' },
+              { item: 2, x: 962, y: 558, w: 146, rot: -15, mirror: false, layer: 'fruit' },
+              { item: 1, x: -10, y: 555, w: 245, rot: 0, mirror: false, layer: 'corner' },
+              { item: 1, x: 1285, y: 35, w: 200, rot: 20, mirror: false, layer: 'corner' },
+            ],
+          },
+        ];
+
+        const stageEl = document.getElementById('stage');
+        const underlineEl = document.getElementById('underline');
+        const tabs = Array.from(document.querySelectorAll('.tab'));
+        const prevBtn = document.getElementById('ui-prev');
+        const nextBtn = document.getElementById('ui-next');
+        const revealEls = [
+          document.getElementById('ui-logo'),
+          document.getElementById('ui-tabs'),
+          document.getElementById('ui-account'),
+          prevBtn,
+          document.getElementById('ui-shop'),
+          nextBtn,
+        ];
+
+        const reducedMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+        const measureCanvas = document.createElement('canvas');
+        const measureCtx = measureCanvas.getContext('2d');
+
+        let currentIdx = 0;
+        let currentU = 1;
+        let isMobile = false;
+        let isTransitioning = false;
+        let lastInteraction = 0;
+        let introDone = false;
+        let introAnimations = [];
+        let introFailsafeTimer = null;
+        let introCompleteTimer = null;
+
+        function proxyUrl(rawUrl) {
+          return PROXY_PREFIX + encodeURIComponent(rawUrl);
+        }
+
+        function applyCrop(el, url, box, targetW) {
+          const [bx, by, bw, bh] = box;
+          const s = targetW / bw;
+          const h = bh * s;
+          const bgSize = SHEET_SIZE * s;
+          el.style.backgroundImage = 'url("' + url + '")';
+          el.style.backgroundSize = 'calc(' + bgSize + ' * var(--u)) calc(' + bgSize + ' * var(--u))';
+          el.style.backgroundPosition = 'calc(' + (-bx * s) + ' * var(--u)) calc(' + (-by * s) + ' * var(--u))';
+          return h;
+        }
+
+        function measureInkWidth(word, lsEm) {
+          measureCtx.font = '700 100px Poppins, system-ui, sans-serif';
+          if ('letterSpacing' in measureCtx) {
+            measureCtx.letterSpacing = (lsEm * 100) + 'px';
+            const m = measureCtx.measureText(word);
+            if (typeof m.actualBoundingBoxLeft === 'number' && typeof m.actualBoundingBoxRight === 'number') {
+              return m.actualBoundingBoxLeft + m.actualBoundingBoxRight;
+            }
+            return m.width;
+          }
+          const m = measureCtx.measureText(word);
+          const base =
+            typeof m.actualBoundingBoxLeft === 'number' && typeof m.actualBoundingBoxRight === 'number'
+              ? m.actualBoundingBoxLeft + m.actualBoundingBoxRight
+              : m.width;
+          return base + (word.length - 1) * lsEm * 100;
+        }
+
+        function cover(t) {
+          if (t <= 0) return 0;
+          if (t >= 1) return 1;
+          for (let i = 0; i < COVER_TABLE.length - 1; i++) {
+            const t0 = COVER_TABLE[i][0];
+            const c0 = COVER_TABLE[i][1];
+            const t1 = COVER_TABLE[i + 1][0];
+            const c1 = COVER_TABLE[i + 1][1];
+            if (t <= t1) {
+              const k = (t - t0) / (t1 - t0);
+              const smooth = k * k * (3 - 2 * k);
+              return c0 + (c1 - c0) * smooth;
+            }
+          }
+          return 1;
+        }
+
+        // Preload all 4 WebP sprite sheets
+        FLAVOURS.forEach((f) => {
+          const img = new Image();
+          img.decoding = 'async';
+          img.src = proxyUrl(f.sheet);
+        });
+
+        // Build slide DOM
+        const slides = FLAVOURS.map((flavour, index) => {
+          const sheetUrl = proxyUrl(flavour.sheet);
+          const section = document.createElement('section');
+          section.className = 'slide' + (index === 0 ? ' is-active' : '');
+          section.style.backgroundColor = flavour.bg;
+          section.setAttribute('aria-label', flavour.name + ' smoothie');
+          section.setAttribute('aria-hidden', index === 0 ? 'false' : 'true');
+
+          const frame = document.createElement('div');
+          frame.className = 'frame';
+
+          // 1. Word layer
+          const wordLayer = document.createElement('div');
+          wordLayer.className = 'layer layer-word';
+          const wordEl = document.createElement('h1');
+          wordEl.className = 'word';
+          wordEl.textContent = flavour.name;
+          wordLayer.appendChild(wordEl);
+
+          // 2. Shadow layer
+          const shadowLayer = document.createElement('div');
+          shadowLayer.className = 'layer layer-shadow';
+          SHADOWS.forEach((sh) => {
+            const sEl = document.createElement('div');
+            sEl.className = 'shadow';
+            sEl.style.left = 'calc(' + (sh.cx - sh.w / 2) + ' * var(--u))';
+            sEl.style.top = 'calc(' + (sh.cy - sh.h / 2) + ' * var(--u))';
+            sEl.style.width = 'calc(' + sh.w + ' * var(--u))';
+            sEl.style.height = 'calc(' + sh.h + ' * var(--u))';
+            shadowLayer.appendChild(sEl);
+          });
+
+          // 3. Bottle layer
+          const bottleLayer = document.createElement('div');
+          bottleLayer.className = 'layer layer-bottle';
+          const bottleEl = document.createElement('div');
+          bottleEl.className = 'bottle';
+          const bottleH = applyCrop(bottleEl, sheetUrl, flavour.items[0], flavour.bottle.w);
+          bottleEl.style.left = 'calc(' + flavour.bottle.x + ' * var(--u))';
+          bottleEl.style.top = 'calc(' + flavour.bottle.y + ' * var(--u))';
+          bottleEl.style.width = 'calc(' + flavour.bottle.w + ' * var(--u))';
+          bottleEl.style.height = 'calc(' + bottleH + ' * var(--u))';
+          bottleLayer.appendChild(bottleEl);
+
+          // 4. Fruit layer & 5. Corner layer
+          const fruitLayer = document.createElement('div');
+          fruitLayer.className = 'layer layer-fruit';
+          const cornerLayer = document.createElement('div');
+          cornerLayer.className = 'layer layer-corner';
+
+          flavour.pieces.forEach((p) => {
+            const outer = document.createElement('div');
+            outer.className = 'piece' + (p.mirror ? ' is-mirrored' : '');
+            const inner = document.createElement('div');
+            inner.className = 'piece-inner';
+
+            const pieceH = applyCrop(inner, sheetUrl, flavour.items[p.item], p.w);
+            outer.style.left = 'calc(' + p.x + ' * var(--u))';
+            outer.style.top = 'calc(' + p.y + ' * var(--u))';
+            outer.style.width = 'calc(' + p.w + ' * var(--u))';
+            outer.style.height = 'calc(' + pieceH + ' * var(--u))';
+
+            const dur = (3.2 + Math.random() * 1.8).toFixed(2) + 's';
+            const delay = (-Math.random() * 4).toFixed(2) + 's';
+            inner.style.setProperty('--r', p.rot + 'deg');
+            inner.style.setProperty('--r0', (p.rot - 3) + 'deg');
+            inner.style.setProperty('--r1', (p.rot + 3) + 'deg');
+            inner.style.setProperty('--dur', dur);
+            inner.style.setProperty('--delay', delay);
+
+            outer.appendChild(inner);
+            (p.layer === 'corner' ? cornerLayer : fruitLayer).appendChild(outer);
+          });
+
+          frame.appendChild(wordLayer);
+          frame.appendChild(shadowLayer);
+          frame.appendChild(bottleLayer);
+          frame.appendChild(fruitLayer);
+          frame.appendChild(cornerLayer);
+          section.appendChild(frame);
+          stageEl.appendChild(section);
+
+          return {
+            section,
+            wordEl,
+            flavour,
+            layers: {
+              word: wordLayer,
+              shadow: shadowLayer,
+              bottle: bottleLayer,
+              fruit: fruitLayer,
+              corner: cornerLayer,
+            },
+          };
+        });
+
+        function moveUnderline(idx, animate) {
+          const tab = tabs[idx];
+          if (!tab) return;
+          if (!animate || reducedMotionQuery.matches) {
+            underlineEl.style.transition = 'none';
+            underlineEl.style.width = tab.offsetWidth + 'px';
+            underlineEl.style.transform = 'translateX(' + tab.offsetLeft + 'px)';
+            void underlineEl.offsetWidth;
+            underlineEl.style.transition = '';
+          } else {
+            underlineEl.style.width = tab.offsetWidth + 'px';
+            underlineEl.style.transform = 'translateX(' + tab.offsetLeft + 'px)';
+          }
+        }
+
+        function layoutWords(vw, u, mobile) {
+          const mobileMaxW = Math.min(DESIGN_W, vw / u) * 0.92;
+
+          slides.forEach((slide) => {
+            const word = slide.flavour.name;
+            const inkDef100 = measureInkWidth(word, 0.005);
+            const isLong = inkDef100 * 4.45 > 1330;
+            const ls = isLong ? -0.035 : 0.005;
+            const ink100 = isLong ? measureInkWidth(word, -0.035) : inkDef100;
+
+            let fontSize;
+            if (mobile) {
+              fontSize = Math.min(445, mobileMaxW / (ink100 / 100));
+            } else {
+              fontSize = isLong ? Math.min(445, 1400 / (ink100 / 100)) : 445;
+            }
+
+            const baseline = 403.5 + (0.698 * fontSize) / 2;
+            const top = baseline - 0.85 * fontSize;
+
+            slide.wordEl.style.fontSize = 'calc(' + fontSize + ' * var(--u))';
+            slide.wordEl.style.letterSpacing = ls + 'em';
+            slide.wordEl.style.top = 'calc(' + top + ' * var(--u))';
+          });
+        }
+
+        function layout() {
+          const vw = window.innerWidth;
+          const vh = window.innerHeight;
+          isMobile = vw <= 820 || vh > vw;
+
+          document.documentElement.classList.toggle('is-mobile', isMobile);
+
+          let u;
+          let fy;
+          if (isMobile) {
+            u = Math.max(0.2, Math.min(vw / 640, (vh - 200) / 620));
+            fy = 8;
+          } else {
+            u = Math.max(0.2, Math.min(vw / DESIGN_W, vh / DESIGN_H));
+            fy = 0;
+          }
+          currentU = u;
+
+          document.documentElement.style.setProperty('--u', u + 'px');
+          document.documentElement.style.setProperty('--fy', fy + 'px');
+
+          layoutWords(vw, u, isMobile);
+          moveUnderline(currentIdx, false);
+        }
+
+        function setTabState(idx, animateUnderline) {
+          tabs.forEach((tab, i) => {
+            if (i === idx) {
+              tab.setAttribute('aria-current', 'true');
+            } else {
+              tab.removeAttribute('aria-current');
+            }
+          });
+          moveUnderline(idx, animateUnderline);
+        }
+
+        function clearSlideTransforms(slide) {
+          Object.values(slide.layers).forEach((layer) => {
+            layer.style.transform = '';
+          });
+        }
+
+        function finishIntro() {
+          if (introDone) return;
+          introDone = true;
+          clearTimeout(introFailsafeTimer);
+          clearTimeout(introCompleteTimer);
+          introAnimations.forEach((anim) => {
+            try {
+              anim.cancel();
+            } catch (_) {
+              // ignore
+            }
+          });
+          introAnimations = [];
+          clearSlideTransforms(slides[0]);
+          revealEls.forEach((el) => {
+            el.classList.remove('reveal-hidden', 'reveal-active');
+          });
+        }
+
+        function runOpeningSequence() {
+          if (reducedMotionQuery.matches) {
+            introDone = true;
+            return;
+          }
+
+          // Hide UI elements and park Berry layers off-screen before fonts resolve
+          const initialFrameW = DESIGN_W * currentU;
+          Object.keys(LAYER_FACTORS).forEach((key) => {
+            const offset = LAYER_FACTORS[key] * initialFrameW;
+            slides[0].layers[key].style.transform = 'translateX(' + offset + 'px)';
+          });
+          revealEls.forEach((el) => {
+            el.classList.add('reveal-hidden');
+          });
+
+          // 3 s failsafe
+          introFailsafeTimer = setTimeout(finishIntro, 3000);
+
+          const startReveal = () => {
+            if (introDone) return;
+            layout();
+            const frameW = DESIGN_W * currentU;
+
+            // Update parked positions with post-font frame width and flush initial reveal-hidden state
+            Object.keys(LAYER_FACTORS).forEach((key) => {
+              const offset = LAYER_FACTORS[key] * frameW;
+              slides[0].layers[key].style.transform = 'translateX(' + offset + 'px)';
+            });
+            void stageEl.offsetWidth;
+
+            requestAnimationFrame(() => {
+              if (introDone) return;
+
+              Object.keys(LAYER_FACTORS).forEach((key) => {
+                const layer = slides[0].layers[key];
+                const startX = LAYER_FACTORS[key] * frameW;
+                layer.style.transform = '';
+                const anim = layer.animate(
+                  [
+                    { transform: 'translateX(' + startX + 'px)' },
+                    { transform: 'translateX(0px)' },
+                  ],
+                  {
+                    duration: 900,
+                    delay: 0,
+                    easing: 'cubic-bezier(0.22, 0.8, 0.3, 1)',
+                    fill: 'forwards',
+                  }
+                );
+                introAnimations.push(anim);
+              });
+
+              revealEls.forEach((el) => {
+                el.classList.add('reveal-active');
+                el.classList.remove('reveal-hidden');
+              });
+
+              introCompleteTimer = setTimeout(finishIntro, 1750);
+            });
+          };
+
+          if (document.fonts && document.fonts.ready) {
+            document.fonts.ready.then(startReveal, startReveal);
+          } else {
+            startReveal();
+          }
+        }
+
+        function goTo(nextIdx, dir, fromUser) {
+          if (fromUser) {
+            lastInteraction = Date.now();
+          }
+          if (isTransitioning || nextIdx === currentIdx) return;
+
+          if (!introDone) {
+            finishIntro();
+          }
+
+          const slideA = slides[currentIdx];
+          const slideB = slides[nextIdx];
+
+          setTabState(nextIdx, true);
+
+          if (reducedMotionQuery.matches) {
+            slideA.section.classList.remove('is-active');
+            slideA.section.setAttribute('aria-hidden', 'true');
+            slideB.section.classList.add('is-active');
+            slideB.section.setAttribute('aria-hidden', 'false');
+            document.body.style.backgroundColor = slideB.flavour.bg;
+            currentIdx = nextIdx;
+            return;
+          }
+
+          isTransitioning = true;
+
+          // Position B's layers on incoming side before revealing B underneath A
+          const initialFrameW = DESIGN_W * currentU;
+          Object.keys(LAYER_FACTORS).forEach((key) => {
+            const offsetB = dir * LAYER_FACTORS[key] * initialFrameW;
+            slideB.layers[key].style.transform = 'translateX(' + offsetB + 'px)';
+          });
+
+          slideB.section.classList.add('is-under');
+          slideB.section.setAttribute('aria-hidden', 'false');
+
+          const startTime = performance.now();
+
+          function step(now) {
+            const elapsed = now - startTime;
+            const t = elapsed / WIPE_DURATION;
+            const c = cover(Math.min(t, 1));
+            const frameW = DESIGN_W * currentU;
+
+            // Clip outgoing slide A
+            const pct = (c * 100).toFixed(4) + '%';
+            if (dir > 0) {
+              slideA.section.style.clipPath = 'inset(0 ' + pct + ' 0 0)';
+            } else {
+              slideA.section.style.clipPath = 'inset(0 0 0 ' + pct + ')';
+            }
+
+            // Drift A's 5 layers
+            const driftA = -dir * c * 0.14 * frameW;
+            const driftAStr = 'translateX(' + driftA + 'px)';
+            slideA.layers.word.style.transform = driftAStr;
+            slideA.layers.shadow.style.transform = driftAStr;
+            slideA.layers.bottle.style.transform = driftAStr;
+            slideA.layers.fruit.style.transform = driftAStr;
+            slideA.layers.corner.style.transform = driftAStr;
+
+            // Parallax incoming slide B
+            const rawB = (t - 0.5) / 0.42;
+            const clampedB = rawB <= 0 ? 0 : rawB >= 1 ? 1 : rawB;
+            const k = 1 - (1 - clampedB) * (1 - clampedB);
+            const remain = 1 - k;
+
+            slideB.layers.word.style.transform = 'translateX(' + (dir * remain * LAYER_FACTORS.word * frameW) + 'px)';
+            slideB.layers.shadow.style.transform = 'translateX(' + (dir * remain * LAYER_FACTORS.shadow * frameW) + 'px)';
+            slideB.layers.bottle.style.transform = 'translateX(' + (dir * remain * LAYER_FACTORS.bottle * frameW) + 'px)';
+            slideB.layers.fruit.style.transform = 'translateX(' + (dir * remain * LAYER_FACTORS.fruit * frameW) + 'px)';
+            slideB.layers.corner.style.transform = 'translateX(' + (dir * remain * LAYER_FACTORS.corner * frameW) + 'px)';
+
+            if (t < 1 || k < 1) {
+              requestAnimationFrame(step);
+              return;
+            }
+
+            // Finish transition
+            slideB.section.classList.remove('is-under');
+            slideB.section.classList.add('is-active');
+            slideA.section.classList.remove('is-active');
+            slideA.section.setAttribute('aria-hidden', 'true');
+            slideA.section.style.clipPath = '';
+
+            clearSlideTransforms(slideA);
+            clearSlideTransforms(slideB);
+
+            document.body.style.backgroundColor = slideB.flavour.bg;
+            currentIdx = nextIdx;
+            isTransitioning = false;
+          }
+
+          requestAnimationFrame(step);
+        }
+
+        function goNext(fromUser) {
+          goTo((currentIdx + 1) % FLAVOURS.length, 1, fromUser);
+        }
+
+        function goPrev(fromUser) {
+          goTo((currentIdx - 1 + FLAVOURS.length) % FLAVOURS.length, -1, fromUser);
+        }
+
+        // Controls: tabs
+        tabs.forEach((tab) => {
+          tab.addEventListener('click', () => {
+            const targetIdx = Number(tab.dataset.index);
+            if (targetIdx === currentIdx) {
+              lastInteraction = Date.now();
+              return;
+            }
+            const dir = targetIdx > currentIdx ? 1 : -1;
+            goTo(targetIdx, dir, true);
+          });
+        });
+
+        // Controls: arrows
+        prevBtn.addEventListener('click', () => goPrev(true));
+        nextBtn.addEventListener('click', () => goNext(true));
+
+        // Controls: prevent hash scroll on placeholder links
+        document.querySelectorAll('.ui a').forEach((link) => {
+          link.addEventListener('click', (e) => {
+            e.preventDefault();
+            lastInteraction = Date.now();
+          });
+        });
+
+        // Controls: keyboard
+        window.addEventListener('keydown', (e) => {
+          if (e.key === 'ArrowRight') {
+            e.preventDefault();
+            goNext(true);
+          } else if (e.key === 'ArrowLeft') {
+            e.preventDefault();
+            goPrev(true);
+          }
+        });
+
+        // Controls: swipe / drag on stage
+        let swipeActive = false;
+        let swipeStartX = 0;
+        let swipeStartY = 0;
+
+        stageEl.addEventListener('pointerdown', (e) => {
+          if (e.button !== undefined && e.button !== 0 && e.pointerType === 'mouse') return;
+          swipeActive = true;
+          swipeStartX = e.clientX;
+          swipeStartY = e.clientY;
+        });
+
+        window.addEventListener('pointerup', (e) => {
+          if (!swipeActive) return;
+          swipeActive = false;
+          const dx = e.clientX - swipeStartX;
+          const dy = e.clientY - swipeStartY;
+          if (Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy)) {
+            if (dx < 0) {
+              goNext(true);
+            } else {
+              goPrev(true);
+            }
+          }
+        });
+
+        window.addEventListener('pointercancel', () => {
+          swipeActive = false;
+        });
+
+        // Autoplay every 2600ms when visible and idle >= 6s
+        setInterval(() => {
+          if (document.hidden || isTransitioning) return;
+          if (Date.now() - lastInteraction < AUTOPLAY_PAUSE) return;
+          goNext(false);
+        }, AUTOPLAY_INTERVAL);
+
+        // Resize handling
+        window.addEventListener('resize', layout);
+
+        // Re-layout when fonts finish loading (important for reduced-motion path too)
+        if (document.fonts && document.fonts.ready) {
+          document.fonts.ready.then(() => {
+            layout();
+          });
+        }
+
+        // Initial layout and opening sequence
+        layout();
+        runOpeningSequence();
+      })();
+    </script>
+  </body>
+</html>
